@@ -1,0 +1,8 @@
+#Example with optional extra parameters (see ansible documentation: http://docs.ansible.com/intro_inventory.html#hosts-and-groups) 
+
+[production]
+webapp              ansible_ssh_user=deploy   ansible_ssh_port=22         ansible_ssh_host=192.168.1.1 	ansible_ssh_private_key_file=~/.ssh/id_rsa
+
+[production:vars]
+groupname=production
+linux_distro=debian

@@ -1,0 +1,75 @@
+#
+# Server Density Agent Config
+# Docs: http://support.serverdensity.com/knowledgebase/articles/69360-agent-config-variables-linux-mac-freebsd
+#
+
+[Main]
+sd_url: {{ sd_url }}
+agent_key: {{ agent_key.stdout }}
+
+#
+# Plugins
+#
+# Leave blank to ignore. See http://support.serverdensity.com/knowledgebase/articles/76018-writing-a-plugin-linux-mac-and-freebsd
+#
+
+plugin_directory: {{ plugin_directory }}
+
+#
+# Optional status monitoring
+#
+# See http://support.serverdensity.com/knowledgebase/topics/10921-configuration
+# Ignore these if you do not wish to monitor them
+#
+
+# Apache
+# See http://support.serverdensity.com/knowledgebase/articles/71145-apache-monitoring-linux-mac-and-freebsd
+
+apache_status_url:  {{ apache_status_url }}
+apache_status_user: {{ apache_status_user }}
+apache_status_pass: {{ apache_status_pass }}
+
+# PHP-FPM
+
+fpm_status_url: {{ fpm_status_url }}
+
+# MongoDB
+# See http://support.serverdensity.com/knowledgebase/articles/71151-mongodb-monitoring-linux-mac-and-freebsd
+
+mongodb_server: {{ mongodb_server }}
+mongodb_dbstats: {{ mongodb_dbstats }}
+mongodb_replset: {{ mongodb_replset }}
+
+# MySQL
+# See http://support.serverdensity.com/knowledgebase/articles/71166-mysql-monitoring-linux-mac-and-freebsd
+
+mysql_server: {{ mysql_server }}
+mysql_user: {{ mysql_user }}
+mysql_pass: {{ mysql_pass }}
+
+# nginx
+# See http://support.serverdensity.com/knowledgebase/articles/75885-nginx-monitoring-linux-mac-and-freebsd
+
+nginx_status_url: {{ nginx_status_url }}
+
+# RabbitMQ
+# See http://support.serverdensity.com/knowledgebase/articles/75888-rabbitmq-monitoring-linux-mac-and-freebsd
+
+rabbitmq_status_url:  {{ rabbitmq_status_url }}
+rabbitmq_user: {{ rabbitmq_user }}
+rabbitmq_pass: {{ rabbitmq_pass }}
+
+# Temporary file location
+# See http://support.serverdensity.com/knowledgebase/articles/69360-agent-config-variables-linux-mac-freebsd
+
+# tmp_directory:  {{ tmp_directory }}
+
+# Pid file location
+# See http://support.serverdensity.com/knowledgebase/articles/69360-agent-config-variables-linux-mac-freebsd
+
+# pidfile_directory:  {{ pidfile_directory }}
+
+# Set log level
+# See http://support.serverdensity.com/knowledgebase/articles/69360-agent-config-variables-linux-mac-freebsd
+
+# logging_level: {{ logging_level }}

@@ -1,0 +1,26 @@
+---
+# Required variables, please update
+sd_url: "https://example.serverdensity.io"
+api_token: "your_apikey"
+
+
+#Optional adavanced configuration. Leave blank for defaults.
+
+plugin_directory: ""
+apache_status_url: ""
+apache_status_user: ""
+apache_status_pass: ""
+fpm_status_url: ""
+mongodb_server: ""
+mongodb_dbstats: ""
+mongodb_replset: ""
+mysql_server: ""
+mysql_user: ""
+mysql_pass: ""
+nginx_status_url: ""
+rabbitmq_status_url: ""
+rabbitmq_user: ""
+rabbitmq_pass: ""
+tmp_directory: ""
+pidfile_directory: ""
+logging_level: ""
