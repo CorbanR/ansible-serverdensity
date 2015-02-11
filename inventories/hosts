@@ -1,8 +1,3 @@
 #See Ansible documentation for more information: http://docs.ansible.com/intro_inventory.html#hosts-and-groups
 [development]
-hostname    ansible_ssh_host=ip_of_host
-
-# [production]
-# hostname ansible_ssh_host=ip_of_host
-# [production:vars]
-# group_name=production_group
+hostname
