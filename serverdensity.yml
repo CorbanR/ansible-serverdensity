@@ -1,5 +1,5 @@
 ---
-- hosts: development
+- hosts: development ##You can change this to `all` to run for all hosts defined in `inventories/hosts`
   gather_facts: yes
   sudo: yes
   roles:
