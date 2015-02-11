@@ -1,38 +1,41 @@
 ansible-serverdensity
 ====================
 
-[Ansible](http://www.ansibleworks.com/) playbook for automatically deploying the server density agent. 
+[Ansible](http://www.ansibleworks.com/) playbook for automatically deploying the Server Density agent. 
 
 ## Requirements
 [Ansible](http://docs.ansible.com/intro_installation.html) >= 1.8
 
 ## Platforms
-
 * Debian/Ubuntu
 * Redhat/CentOS
 
 ## Usage
+This playbook will install the Server Density agent, allowing for custom configuration and server grouping. 
 
-This playbook will install the server density agent, allowing for custom configuration and server grouping. 
-
-## Initial Setup
+## Required Setup
 Create an API token using these directions 
 [https://apidocs.serverdensity.com/#authentication](https://apidocs.serverdensity.com/#authentication)
 
-You will need to edit the following two files.
+Edit the following files.
 
 * `roles/serverdensity/vars/main.yml`
-* `inventories/hosts`
+* `inventories/hosts` 
+* `serverdensity.yml`
 
-### Examples
-Example 1: Setting `group_name` via hosts file `inventories/hosts`
+### Configuration Examples
+There are many different ways to set or overwrite Ansible varabiles. These are only a few examples. For more information about setting varaibles, read the official [Ansible Documentation](http://docs.ansible.com/playbooks_variables.html).
+
+Example Ansible command: `ansible-playbook -i inventories/hosts serverdensity.yml`
+
+Example: Setting `group_name` via `inventories/hosts` file
 ```
 [development]
 hostname ansible_ssh_host=ip_of_host
 [development:vars]
 group_name=development_servers
 ```
-Example 2: Setting `group_name` via playbook
+Example: Setting `group_name` via role parameter
 ```
 - hosts: development
   gather_facts: yes
@@ -40,7 +43,7 @@ Example 2: Setting `group_name` via playbook
   roles:
     - { role: serverdensity, group_name: "development_servers" }
 ```
-Example 3: Setting `group_name` and other varaibles via playbook version 2
+Example: Setting `group_name` and other varaibles via playbook vars
 ```
 - hosts: development
   gather_facts: yes
@@ -56,7 +59,7 @@ Example 3: Setting `group_name` and other varaibles via playbook version 2
 ```
 
 ## Default variables
-You are not requried to update these in order to get the server density agent to run. You can overwrite these variable in your playbook. See the above examples on how to do so. 
+You are not requried to update these variables in order to get the Server Density agent running. You can however overwrite these variables in your playbook should you choose to do so.
 ```
 group_name: "ungrouped"
 plugin_directory: ""
