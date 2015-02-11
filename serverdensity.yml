@@ -1,22 +1,5 @@
 ---
-- hosts: all
+- hosts: development
   sudo: yes
-
   roles:
-    - dependencies
     - serverdensity
-
-  vars_files:
-   - vars/vars.yml
-
-#Alternatively you can specify a specific host and non-root user (See ansible documentation)
-#- hosts: production
-#  remote_user: deploy  
-#  sudo: yes
-#
-#  roles:
-#    - dependencies
-#    - serverdensity
-#
-#  vars_files:
-#   - vars/vars.yml

@@ -1,4 +1,20 @@
 ---
+- name: install server density dependencies debian
+  apt:  pkg={{ item }}
+        state=present
+        update-cache=yes
+        cache_valid_time=86400
+  with_items:
+    - curl
+  when: ansible_os_family == "Debian"
+
+- name: install server density dependencies centos
+  yum:  name={{ item }}
+        state=present
+  with_items:
+    - curl
+  when: ansible_os_family == "RedHat"
+
 - name: getting the install script
   get_url: url=https://www.serverdensity.com/downloads/agent-install.sh
            dest=/usr/local/src/serverdensity-install.sh
@@ -7,15 +23,16 @@
            mode=0700
 
 - name: run the install script
-  shell: /usr/local/src/./serverdensity-install.sh -a {{ sd_url }} -t {{ api_token }} -g {{ groupname }} > /usr/local/src/sd-install.log
+  shell: /usr/local/src/./serverdensity-install.sh -a {{ sd_url }} -t {{ api_token }} -g {{ group_name }} > /usr/local/src/sd-install.log
           creates=/usr/bin/sd-agent/agent.py
 
 #In order for the variable to stay consistent this command will run with every subsequent ansible run
+#This variable is used to prevent adding the same server multiple times.
 - name: grep out sd-agent key and save to file
   shell: echo | egrep "Agent.Key:\s(\S*)" /usr/local/src/sd-install.log | awk '{print $3}' | tee /usr/local/src/sd-agent-key.log
   register: agent_key
 
-- name: copy config file. restart sd-agent if changed
+- name: copy config file
   template: src=config.template.j2
             dest=/etc/sd-agent/config.cfg
             owner=sd-agent
@@ -30,10 +47,10 @@
         update-cache=yes
         cache_valid_time=86400
   notify: restart sd-agent  
-  when: linux_distro == "debian"
+  when: ansible_os_family == "Debian"
 
 - name: update serverdensity agent centos if needed
   yum:  name=sd-agent
         state=latest
   notify: restart sd-agent
-  when: linux_distro == "centos"
+  when: ansible_os_family == "RedHat"

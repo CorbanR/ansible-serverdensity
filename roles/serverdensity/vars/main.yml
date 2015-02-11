@@ -1,0 +1,5 @@
+---
+# Required variables, please update
+# View the folling documentation on how to set up an API token https://apidocs.serverdensity.com/#authentication
+sd_url: "https://example.serverdensity.io"
+api_token: "Your_API_Token"

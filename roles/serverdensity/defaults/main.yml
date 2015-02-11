@@ -1,11 +1,8 @@
 ---
-# Required variables, please update
-sd_url: "https://example.serverdensity.io"
-api_token: "your_apikey"
-
+#Sets your server group 
+group_name: "ungrouped"
 
 #Optional adavanced configuration. Leave blank for defaults.
-
 plugin_directory: ""
 apache_status_url: ""
 apache_status_user: ""

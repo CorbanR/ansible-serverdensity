@@ -1,9 +1,8 @@
-#Example with optional extra parameters (see ansible documentation: http://docs.ansible.com/intro_inventory.html#hosts-and-groups)
-#See hosts.example for more info 
-[hosts]
-hostname           ansible_ssh_user=user     ansible_ssh_port=ssh_port         ansible_ssh_host=ip_of_host		ansible_ssh_private_key_file=path_to_private_key
+#See Ansible documentation for more information: http://docs.ansible.com/intro_inventory.html#hosts-and-groups
+[development]
+hostname    ansible_ssh_host=ip_of_host
 
-[hosts:vars]
-groupname=serverdensity_groupname
-#centos or debian
-linux_distro=linux_distribution
+# [production]
+# hostname ansible_ssh_host=ip_of_host
+# [production:vars]
+# group_name=production_group
