@@ -37,6 +37,13 @@
             backup=yes
   notify: restart sd-agent
 
+- name: Setup logrotate
+  template: src=sd-logrotate.j2
+            dest=/etc/logrotate.d/sd-logrotate
+            owner=root
+            group=root
+            mode=644
+
 - name: Update server density agent if needed (Debian/Ubuntu)
   apt:  pkg=sd-agent
         state=latest
