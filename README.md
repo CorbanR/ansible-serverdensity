@@ -59,16 +59,18 @@ hostname ansible_ssh_host=ip_of_host
 [development:vars]
 group_name=development_servers
 ```
-Example2: Setting `group_name` via playbook
+Example 2: Setting `group_name` via playbook
 ```
 - hosts: development
+  gather_facts: yes
   sudo: yes
   roles:
     - { role: serverdensity, group_name: "development_servers" }
 ```
-Example3: Setting `group_name` via playbook version 2
+Example 3: Setting `group_name` via playbook version 2
 ```
 - hosts: development
+  gather_facts: yes
   sudo: yes
   vars: 
     group_name: "development_servers"
