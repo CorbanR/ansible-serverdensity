@@ -24,6 +24,37 @@ You will need to edit the following two files.
 * `roles/serverdensity/vars/main.yml`
 * `inventories/hosts`
 
+### Examples
+Example 1: Setting `group_name` via hosts file `inventories/hosts`
+```
+[development]
+hostname ansible_ssh_host=ip_of_host
+[development:vars]
+group_name=development_servers
+```
+Example 2: Setting `group_name` via playbook
+```
+- hosts: development
+  gather_facts: yes
+  sudo: yes
+  roles:
+    - { role: serverdensity, group_name: "development_servers" }
+```
+Example 3: Setting `group_name` and other varaibles via playbook version 2
+```
+- hosts: development
+  gather_facts: yes
+  sudo: yes
+  vars: 
+    group_name: "development_servers"
+    mysql_server: "localhost"
+    mysql_user: "root"
+    mysql_pass: "password"
+    
+  roles:
+    - serverdensity
+```
+
 ## Default variables
 ```
 group_name: "ungrouped"
@@ -47,39 +78,8 @@ pidfile_directory: ""
 logging_level: ""
 ```
 
-### inventories/hosts
-Add your hosts to this file. See file for some examples
-
-
-### Examples
-Example 1: Setting `group_name` via hosts file
-```
-[development]
-hostname ansible_ssh_host=ip_of_host
-[development:vars]
-group_name=development_servers
-```
-Example 2: Setting `group_name` via playbook
-```
-- hosts: development
-  gather_facts: yes
-  sudo: yes
-  roles:
-    - { role: serverdensity, group_name: "development_servers" }
-```
-Example 3: Setting `group_name` via playbook version 2
-```
-- hosts: development
-  gather_facts: yes
-  sudo: yes
-  vars: 
-    group_name: "development_servers"
-  roles:
-    - serverdensity
-```
-
-#### Optional Parameters Descriptions
-
+#### Default variable descriptions
+* `group_name` - Sets the group name 
 * `plugin_directory:` -  Sets the directory the agent looks for plugins, if left blank it is ignored
 * `apache_status_url:` - URL to get the Apache2 status page from (e.g. `mod_status`), disabled if not set
 * `apache_status_user:` - Username to authenticate to the Apache2 status page, required if `apache_status_url` is set
