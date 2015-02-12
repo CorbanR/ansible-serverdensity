@@ -1,12 +1,12 @@
 ---
-- name: Install server density dependencies (Debian/Ubuntu)
-  apt:  pkg=curl
+- name: Install Server Density dependencies (Debian/Ubuntu)
+  apt:  name=curl
         state=present
         update-cache=yes
         cache_valid_time=86400
   when: ansible_os_family == "Debian"
 
-- name: Install server density dependencies (RedHat/CentOS)
+- name: Install Server Density dependencies (RedHat/CentOS)
   yum:  name=curl
         state=present
   when: ansible_os_family == "RedHat"
@@ -22,7 +22,7 @@
   shell: /usr/local/src/./serverdensity-install.sh -a {{ sd_url }} -t {{ api_token }} -g {{ group_name }} > /var/log/sd-install.log
           creates=/usr/bin/sd-agent/agent.py
 
-#In order for the variable to stay consistent this command will run with every subsequent ansible run
+#In order for the variable to stay consistent, this command will execute with every subsequent Ansible run.
 #This variable is used to prevent adding the same server multiple times.
 - name: Grep out sd-agent key and register variable
   shell: echo | egrep "Agent.Key:\s(\S*)" /var/log/sd-install.log | awk '{print $3}' | tee /tmp/sd-agent-key
@@ -44,15 +44,15 @@
             group=root
             mode=644
 
-- name: Update server density agent if needed (Debian/Ubuntu)
-  apt:  pkg=sd-agent
+- name: Update Server Density agent if needed (Debian/Ubuntu)
+  apt:  name=sd-agent
         state=latest
         update-cache=yes
         cache_valid_time=86400
-  notify: restart sd-agent  
+  notify: restart sd-agent
   when: ansible_os_family == "Debian"
 
-- name: update server density agent if needed (RedHat/CentOS)
+- name: Update Server Density agent if needed (RedHat/CentOS)
   yum:  name=sd-agent
         state=latest
   notify: restart sd-agent

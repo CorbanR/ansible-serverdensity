@@ -1,10 +1,10 @@
 ---
-#Sets your server group 
+#Sets your server group
 group_name: "ungrouped"
 
-#Optional adavanced configuration.
+#Optional advanced configuration
 plugin_directory: ""
-apache_status_url: "http://www.example.com/server-status/?auto" 
+apache_status_url: "http://www.example.com/server-status/?auto"
 apache_status_user: 
 apache_status_pass: 
 fpm_status_url: ""

@@ -11,31 +11,29 @@ ansible-serverdensity
 * Redhat/CentOS
 
 ## Usage
-This playbook will install the Server Density agent, allowing for custom configuration and server grouping. 
+This playbook will install the Server Density agent, allowing for custom configuration and server grouping.
 
 ## Required Setup
-Create an API token using these directions 
-[https://apidocs.serverdensity.com/#authentication](https://apidocs.serverdensity.com/#authentication)
+Create an API token using [these directions](https://apidocs.serverdensity.com/#authentication).
 
-Edit the following files.
-
+Edit the following files:
 * `roles/serverdensity/vars/main.yml`
-* `inventories/hosts` 
+* `inventories/hosts`
 * `serverdensity.yml`
 
 ### Configuration Examples
-There are many different ways to set or overwrite Ansible varabiles. These are only a few examples. For more information about setting varaibles, read the official [Ansible Documentation](http://docs.ansible.com/playbooks_variables.html).
+There are many different ways to set or overwrite Ansible variables. These are only a few examples. For more information about setting variables, read the official [Ansible Documentation](http://docs.ansible.com/playbooks_variables.html).
 
 Example Ansible command: `ansible-playbook -i inventories/hosts serverdensity.yml`
 
-Example: Setting `group_name` via `inventories/hosts` file
+Example: Setting `group_name` via the `inventories/hosts` file:
 ```
 [development]
 hostname ansible_ssh_host=ip_of_host
 [development:vars]
 group_name=development_servers
 ```
-Example: Setting `group_name` via role parameter
+Example: Setting `group_name` via a role parameter:
 ```
 - hosts: development
   gather_facts: yes
@@ -43,7 +41,7 @@ Example: Setting `group_name` via role parameter
   roles:
     - { role: serverdensity, group_name: "development_servers" }
 ```
-Example: Setting `group_name` and other varaibles via playbook vars
+Example: Setting `group_name` and other variables via playbook variables:
 ```
 - hosts: development
   gather_facts: yes
@@ -58,8 +56,8 @@ Example: Setting `group_name` and other varaibles via playbook vars
     - serverdensity
 ```
 
-## Default variables
-You are not requried to update these variables in order to get the Server Density agent running. You can however overwrite these variables in your playbook should you choose to do so.
+## Default Variables
+You are not required to update these variables in order to get the Server Density agent running. However, you can overwrite these variables in your playbook should you choose to do so.
 ```
 group_name: "ungrouped"
 plugin_directory: ""
@@ -82,22 +80,22 @@ pidfile_directory: ""
 logging_level: ""
 ```
 
-#### Default variable descriptions
-* `group_name` - Sets the group name 
-* `plugin_directory:` -  Sets the directory the agent looks for plugins, if left blank it is ignored
-* `apache_status_url:` - URL to get the Apache2 status page from (e.g. `mod_status`)
-* `apache_status_user:` - Username to authenticate to the Apache2 status page, required if `apache_status_url` is set
-* `apache_status_pass:` - Password to authenticate to the Apache2 status page, required if `apache_status_url` is set
-* `fpm_status_url:` - URL to get the PHP-FPM status page from, disabled if not set
-* `mongodb_server:` - Server to get MongoDB status monitoring from, this takes a full [MongoDB connection URI](http://docs.mongodb.org/manual/reference/connection-string/) so you can set username/password etc. details here if needed, disabled if not set
-* `mongodb_dbstats:` - Enables MongoDB stats if `yes` and `mongodb_server` is set
-* `mongodb_replset:` - Enables MongoDB replset stats if `yes` and `mongodb_server` is set
-* `mysql_server:` - Server to get MySQL status monitoring from, disabled if not set
-* `mysql_user:` - Username to authenticate to MySQL, required if `mysql_server` is set
-* `mysql_pass:` - Password to authenticate to MySQL, required if `mysql_server` is set
-* `nginx_status_url:` - URL to get th Nginx status page from
-* `rabbitmq_status_url:` - URL to get the RabbitMQ status from via [HTTP management API](http://www.rabbitmq.com/management.html)
-* `rabbitmq_user:` - Username to authenticate to the RabbitMQ management API, required if `rabbitmq_status_url` is set
-* `rabbitmq_pass:` - Password to authenticate to the RabbitMQ management API, required if `rabbitmq_status_url` is set
-* `tmp_directory:` - Override where the agent stores temporary files, system default tmp will be used if not set
-* `pidfile_directory:` - Override where the agent stores it's PID file, temp dir (above or system default) is used if not set
+#### Default Variable Descriptions
+* `group_name` - Sets the group name.
+* `plugin_directory` -  Sets the directory where the agent looks for plugins. If the variable is left blank, it is ignored.
+* `apache_status_url` - URL from which to retrieve the Apache2 status page (e.g. `mod_status`).
+* `apache_status_user` - Username for Apache2 status page authentication. This value is required if `apache_status_url` is set.
+* `apache_status_pass` - Password for Apache2 status page authentication. This value is required if `apache_status_url` is set
+* `fpm_status_url` - URL from which to retrieve the PHP-FPM status page. This functionality is disabled if the variable is not set.
+* `mongodb_server` - Server from which to retrieve MongoDB status monitoring information. This takes a full [MongoDB connection URI](http://docs.mongodb.org/manual/reference/connection-string/) so you can set any required details (e.g. username, password, etc.) as needed. This functionality is disabled if the variable is not set.
+* `mongodb_dbstats` - Enables MongoDB stats if set to `yes` and a value for `mongodb_server` is also present.
+* `mongodb_replset` - Enables MongoDB replset stats if set to `yes` and a value for `mongodb_server` is also present.
+* `mysql_server` - Server from which to retrieve MySQL status monitoring information. This functionality is disabled if the variable is not set.
+* `mysql_user` - Username for MySQL authentication. This variable is required if `mysql_server` is set.
+* `mysql_pass` - Password for MySQL authentication. This variable is required if `mysql_server` is set
+* `nginx_status_url` - URL from which to retrieve the Nginx status page.
+* `rabbitmq_status_url` - URL from which to retrieve the RabbitMQ status via its [HTTP management API](http://www.rabbitmq.com/management.html).
+* `rabbitmq_user` - Username for RabbitMQ management API authentication. This variable is required if `rabbitmq_status_url` is set.
+* `rabbitmq_pass` - Password for RabbitMQ management API authentication. This variable is required if `rabbitmq_status_url` is set.
+* `tmp_directory` - Override where the agent stores its temporary files. The default tmp directory will be used otherwise.
+* `pidfile_directory` - Override where the agent stores its PID file. The `tmp_directory` value (which is either set explicitly or uses the system default) will be chosen otherwise.
