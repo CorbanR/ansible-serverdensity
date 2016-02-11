@@ -1,0 +1,86 @@
+---
+- name: Add the Server Density repository signing key (Debian/Ubuntu)
+  apt_key:
+    id: "74371316"
+    data: "{{ item }}"
+  with_file: sd-packaging-public.key
+  when: ansible_os_family == "Debian"
+
+- name: Add Server Density repository (Debian/Ubuntu)
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  with_items:
+    - "deb https://archive.serverdensity.com/{{ ansible_lsb.id | lower }}/ all main"
+  when: ansible_os_family == "Debian"
+
+- name: Copy Server Density repository signing key (RedHat/CentOS)
+  copy:
+    src: sd-packaging-public.key
+    dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-serverdensity
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_os_family == "RedHat"
+
+- name: Install Server Density repository signing key (RedHat/CentOS)
+  command: rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-serverdensity
+  when: ansible_os_family == "RedHat"
+
+- name: Add server Density repository (RedHat/CentOS)
+  copy:
+    src: serverdensity.repo
+    dest: /etc/yum.repos.d/serverdensity.repo
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_os_family == "RedHat"
+
+- name: Install/Update Server Density agent (Debian/Ubuntu)
+  apt:
+    name: sd-agent
+    state: latest
+    update-cache: yes
+    cache_valid_time: 86400
+  notify: restart sd-agent
+  when: ansible_os_family == "Debian"
+
+- name: Install/Update Server Density agent (RedHat/CentOS)
+  yum:
+    name: sd-agent
+    state: latest
+  notify: restart sd-agent
+  when: ansible_os_family == "RedHat"
+
+- name: Check to see if we previously upgraded the Server Density agent from v1 to v2
+  stat:
+    path: /var/log/sd-upgrade-v2-key.log.json
+  register: upgraded
+
+- name: Register device with the Server Density API
+  shell: curl -v -X POST https://api.serverdensity.io/inventory/devices/?token={{ api_token }} \
+         --data name={{ sd_hostname | default(ansible_hostname) }} \
+         --data group={{ group_name}} > /var/log/sd-agent-v2-install.log.json
+  args:
+    creates: /var/log/sd-agent-v2-install.log.json
+  when: not upgraded.stat.exists
+
+- name: Register JSON
+  command: cat /var/log/sd-agent-v2-install.log.json
+  register: result
+  when: not upgraded.stat.exists
+
+- name: Register JSON upgraded
+  command: cat /var/log/sd-upgrade-v2-key.log.json
+  register: result_upgraded
+  when: upgraded.stat.exists
+
+- name: Set JSON to variable
+  set_fact:
+    api_result: "{{ result.stdout|from_json }}"
+  when: not upgraded.stat.exists
+
+- name: Set JSON to variable upgraded
+  set_fact:
+    api_result: "{{ result_upgraded.stdout|from_json }}"
+  when: upgraded.stat.exists

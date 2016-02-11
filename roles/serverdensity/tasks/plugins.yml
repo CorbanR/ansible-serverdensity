@@ -1,0 +1,30 @@
+---
+- name: Install Server Density plugins (Debian/Ubuntu)
+  apt:
+    name: "sd-agent-{{ item }}"
+    state: latest
+  with_items: plugins
+  when: ansible_os_family == "Debian"
+
+- name: Install Server Density plugins (RedHat/CentOS)
+  yum:
+    name: "sd-agent-{{ item }}"
+    state: latest
+  with_items: plugins
+  when: ansible_os_family == "RedHat"
+
+- name: Install plugin configuration
+  template:
+    src: conf.d/{{ item }}.yaml.j2
+    dest: /etc/sd-agent/conf.d/{{ item }}.yaml
+    owner: sd-agent
+    group: sd-agent
+    mode: 0644
+  notify: restart sd-agent
+  with_items: plugins
+
+- name: Remove plugin example files
+  file:
+    path: "/etc/sd-agent/conf.d/{{ item }}.yaml.example"
+    state: absent
+  with_items: plugins

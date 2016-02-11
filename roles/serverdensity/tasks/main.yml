@@ -1,59 +1,43 @@
 ---
 - name: Install Server Density dependencies (Debian/Ubuntu)
-  apt:  name=curl
-        state=present
-        update-cache=yes
-        cache_valid_time=86400
+  apt:
+    name: curl
+    state: present
   when: ansible_os_family == "Debian"
 
 - name: Install Server Density dependencies (RedHat/CentOS)
-  yum:  name=curl
-        state=present
+  yum:
+    name: curl
+    state: present
   when: ansible_os_family == "RedHat"
 
-- name: Get the install script
-  get_url: url=https://www.serverdensity.com/downloads/agent-install.sh
-           dest=/usr/local/src/serverdensity-install.sh
-           owner=root
-           group=root
-           mode=0700
+- name: Install v2 Server Density agent
+  include: agent.yml
+  when: upgrade_v2 is not defined
 
-- name: Run the install script
-  shell: /usr/local/src/./serverdensity-install.sh -a {{ sd_url }} -t {{ api_token }} -g {{ group_name }} > /var/log/sd-install.log
-          creates=/usr/bin/sd-agent/agent.py
-
-#In order for the variable to stay consistent, this command will execute with every subsequent Ansible run.
-#This variable is used to prevent adding the same server multiple times.
-- name: Grep out sd-agent key and register variable
-  shell: echo | egrep "Agent.Key:\s(\S*)" /var/log/sd-install.log | awk '{print $3}' | tee /tmp/sd-agent-key
-  register: agent_key
+- name: Upgrade Server Density agent to v2
+  include: upgrade.yml
+  when: upgrade_v2 is defined
 
 - name: Copy config file
-  template: src=config.template.j2
-            dest=/etc/sd-agent/config.cfg
-            owner=sd-agent
-            group=sd-agent
-            mode=660
-            backup=yes
+  template:
+    src: config.template.j2
+    dest: /etc/sd-agent/config.cfg
+    owner: sd-agent
+    group: sd-agent
+    mode: 0660
+    backup: yes
   notify: restart sd-agent
 
 - name: Setup logrotate
-  template: src=sd-logrotate.j2
-            dest=/etc/logrotate.d/sd-logrotate
-            owner=root
-            group=root
-            mode=644
+  template:
+    src: sd-logrotate.j2
+    dest: /etc/logrotate.d/sd-logrotate
+    owner: root
+    group: root
+    mode: 0644
 
-- name: Update Server Density agent if needed (Debian/Ubuntu)
-  apt:  name=sd-agent
-        state=latest
-        update-cache=yes
-        cache_valid_time=86400
-  notify: restart sd-agent
-  when: ansible_os_family == "Debian"
+- name: Install additional plugins
+  include: plugins.yml
+  when: plugins is defined
 
-- name: Update Server Density agent if needed (RedHat/CentOS)
-  yum:  name=sd-agent
-        state=latest
-  notify: restart sd-agent
-  when: ansible_os_family == "RedHat"

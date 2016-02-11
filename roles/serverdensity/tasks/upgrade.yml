@@ -1,0 +1,33 @@
+---
+- name: Get the v2 upgrade script
+  get_url:
+    url: https://archive.serverdensity.com/agent-upgrade.sh
+    dest: /usr/local/src/serverdensity-upgrade.sh
+    owner: root
+    group: root
+    mode: 0700
+  when: upgrade_v2 is defined
+
+- name: Run the v2 upgrade script
+  shell: /usr/local/src/./serverdensity-upgrade.sh > /var/log/sd-agent-upgrade-v2.log
+  args:
+    creates: /var/log/sd-agent-upgrade-v2.log
+  notify: restart sd-agent
+  when: upgrade_v2 is defined
+
+- name: Get agent key
+  shell: echo | grep "agent_key" /tmp/sd-agent.config.cfg | awk '{print $2}'
+  register: agent_key
+
+- name: Save key to file
+  copy:
+    content: '{"agentKey": "{{ agent_key.stdout }}"}'
+    dest: "/var/log/sd-upgrade-v2-key.log.json"
+
+- name: Register JSON
+  command: "cat /var/log/sd-upgrade-v2-key.log.json"
+  register: result
+
+- name: Set JSON to variable
+  set_fact:
+    api_result: "{{ result.stdout|from_json }}"

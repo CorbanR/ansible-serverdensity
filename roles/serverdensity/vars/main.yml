@@ -1,5 +1,7 @@
 ---
 # Required variables; please update.
 # API token documentation is available here: https://apidocs.serverdensity.com/#authentication
-sd_url: "https://example.serverdensity.io"
-api_token: "Your_API_Token"
+
+#Uncomment and update the variables below
+#sd_account: "example"        #####previously sd_url: "https://example.serverdensity.io"#####
+#api_token: "Your_API_Token"

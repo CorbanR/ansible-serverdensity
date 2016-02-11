@@ -2,22 +2,9 @@
 #Sets your server group
 group_name: "ungrouped"
 
-#Optional advanced configuration
+#Optional configuration
 plugin_directory: ""
-apache_status_url: "http://www.example.com/server-status/?auto"
-apache_status_user: 
-apache_status_pass: 
-fpm_status_url: ""
-mongodb_server: ""
-mongodb_dbstats: "no"
-mongodb_replset: "no"
-mysql_server: ""
-mysql_user: ""
-mysql_pass: ""
-nginx_status_url: "http://www.example.com/nginx_status" 
-rabbitmq_status_url: "http://www.example.com:55672/json"
-rabbitmq_user: "guest"
-rabbitmq_pass: "guest"
-tmp_directory: ""
-pidfile_directory: ""
-logging_level: ""
+
+#Ubuntu Default
+ansible_lsb:
+  id: "ubuntu"

@@ -1,75 +1,46 @@
-#
-# Server Density Agent Config
-# Docs: http://support.serverdensity.com/knowledgebase/articles/69360-agent-config-variables-linux-mac-freebsd
-#
-
 [Main]
-sd_url: {{ sd_url }}
-agent_key: {{ agent_key.stdout }}
+
+# The Server Density account where this device is used.
+# Only the account name, e.g. abc not abc.serverdensity.io
+sd_account: {{ sd_account }}
+
+# The Server Density agent key to associate your Agent's data with a device
+# on your account.
+agent_key: {{ api_result.agentKey }}
+
+# If you need a proxy to connect to the Internet, provide the settings here
+# proxy_host: my-proxy.com
+# proxy_port: 3128
+# proxy_user: user
+# proxy_password: password
+# To be used with some proxys that return a 302 which make curl switch from POST to GET
+# See http://stackoverflow.com/questions/8156073/curl-violate-rfc-2616-10-3-2-and-switch-from-post-to-get
+# proxy_forbid_method_switch: no
+
+# Force the hostname to whatever you want.
+#hostname: mymachine.mydomain
 
 #
 # Plugins
 #
-# Leave blank to ignore. See http://support.serverdensity.com/knowledgebase/articles/76018-writing-a-plugin-linux-mac-and-freebsd
+# Leave blank to ignore.
+# See https://support.serverdensity.com/hc/en-us/articles/213074438-Information-about-Custom-Plugins
 #
-
 plugin_directory: {{ plugin_directory }}
 
+# ========================================================================== #
+# Logging
+# See https://support.serverdensity.com/hc/en-us/articles/213093038-Log-levels-agent-debug-mode
+# ========================================================================== #
+
+# log_level: INFO
+
+# collector_log_file: /var/log/sd-agent/collector.log
+# forwarder_log_file: /var/log/sd-agent/forwarder.log
+
+# if syslog is enabled but a host and port are not set, a local domain socket
+# connection will be attempted
 #
-# Optional status monitoring
-#
-# See http://support.serverdensity.com/knowledgebase/topics/10921-configuration
-# Ignore these if you do not wish to monitor them
-#
-
-# Apache
-# See http://support.serverdensity.com/knowledgebase/articles/71145-apache-monitoring-linux-mac-and-freebsd
-
-apache_status_url:  {{ apache_status_url }}
-apache_status_user: {{ apache_status_user }}
-apache_status_pass: {{ apache_status_pass }}
-
-# PHP-FPM
-
-fpm_status_url: {{ fpm_status_url }}
-
-# MongoDB
-# See http://support.serverdensity.com/knowledgebase/articles/71151-mongodb-monitoring-linux-mac-and-freebsd
-
-mongodb_server: {{ mongodb_server }}
-mongodb_dbstats: {{ mongodb_dbstats }}
-mongodb_replset: {{ mongodb_replset }}
-
-# MySQL
-# See http://support.serverdensity.com/knowledgebase/articles/71166-mysql-monitoring-linux-mac-and-freebsd
-
-mysql_server: {{ mysql_server }}
-mysql_user: {{ mysql_user }}
-mysql_pass: {{ mysql_pass }}
-
-# nginx
-# See http://support.serverdensity.com/knowledgebase/articles/75885-nginx-monitoring-linux-mac-and-freebsd
-
-nginx_status_url: {{ nginx_status_url }}
-
-# RabbitMQ
-# See http://support.serverdensity.com/knowledgebase/articles/75888-rabbitmq-monitoring-linux-mac-and-freebsd
-
-rabbitmq_status_url:  {{ rabbitmq_status_url }}
-rabbitmq_user: {{ rabbitmq_user }}
-rabbitmq_pass: {{ rabbitmq_pass }}
-
-# Temporary file location
-# See http://support.serverdensity.com/knowledgebase/articles/69360-agent-config-variables-linux-mac-freebsd
-
-# tmp_directory:  {{ tmp_directory }}
-
-# Pid file location
-# See http://support.serverdensity.com/knowledgebase/articles/69360-agent-config-variables-linux-mac-freebsd
-
-# pidfile_directory:  {{ pidfile_directory }}
-
-# Set log level
-# See http://support.serverdensity.com/knowledgebase/articles/69360-agent-config-variables-linux-mac-freebsd
-
-# logging_level: {{ logging_level }}
+# log_to_syslog: yes
+# syslog_host:
+# syslog_port:

@@ -1,0 +1,6 @@
+[server-density]
+name=Server Density Repository for Enterprise Linux $releasever - $basearch
+baseurl=http://archive.serverdensity.com/el/$releasever
+failovermethod=priority
+enabled=1
+gpgcheck=1
