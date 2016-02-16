@@ -52,18 +52,31 @@
   notify: restart sd-agent
   when: ansible_os_family == "RedHat"
 
+- name: Getting some extra facts
+  action: ec2_facts
+
 - name: Check to see if we previously upgraded the Server Density agent from v1 to v2
   stat:
     path: /var/log/sd-upgrade-v2-key.log.json
   register: upgraded
 
-- name: Register device with the Server Density API
+- name: Register device with the Server Density API - non AWS
   shell: curl -v -X POST https://api.serverdensity.io/inventory/devices/?token={{ api_token }} \
          --data name={{ sd_hostname | default(ansible_hostname) }} \
          --data group={{ group_name}} > /var/log/sd-agent-v2-install.log.json
   args:
     creates: /var/log/sd-agent-v2-install.log.json
-  when: not upgraded.stat.exists
+  when: not upgraded.stat.exists and ansible_ec2_instance_id is undefined
+
+- name: Register device with the Server Density API - AWS
+  shell: curl -v -X POST https://api.serverdensity.io/inventory/devices/?token={{ api_token }} \
+         --data name={{ sd_hostname | default(ansible_ec2_instance_id) }} \
+         --data group={{ group_name}} \
+         --data provider=amazon \
+         --data providerId={{ ansible_ec2_instance_id }} > /var/log/sd-agent-v2-install.log.json
+  args:
+    creates: /var/log/sd-agent-v2-install.log.json
+  when: not upgraded.stat.exists and ansible_ec2_instance_id is defined
 
 - name: Register JSON
   command: cat /var/log/sd-agent-v2-install.log.json
